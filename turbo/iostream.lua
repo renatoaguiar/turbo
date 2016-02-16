@@ -708,6 +708,9 @@ end
 --- Read from the socket and append to the read buffer.
 --  @return Amount of bytes appended to self._read_buffer.
 function iostream.IOStream:_read_to_buffer()
+    if self._read_buffer_size + TURBO_SOCKET_BUFFER_SZ >= self.max_buffer_size then
+        return 0
+    end
     local ptr, sz, closed = self:_read_from_socket()
     if not ptr then
         return 0
